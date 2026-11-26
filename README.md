@@ -98,11 +98,6 @@ pob_updater.py     downloads/updates/rolls back the Path of Building source
 Run from source: `pip install -r requirements.txt` then `python poe_assistant.py`.
 Contributions are welcome - especially compatibility fixes for new Path of Building releases, flasks/jewels, and tests.
 
-## Build a Setup.exe (optional)
-
-Install [Inno Setup 6](https://jrsoftware.org/isinfo.php), run `install.bat` once, then `build_installer.bat`
-(PyInstaller + `installer.iss` -> `Output\PoE-Assistant-Setup.exe`). This route is untested - feedback welcome.
-
 ## Credits and license
 
 Built on [Path of Building Community](https://github.com/PathOfBuildingCommunity/PathOfBuilding) (MIT) - thank you to its authors.
