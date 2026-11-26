@@ -55,7 +55,6 @@ Your characters must be **public** (pathofexile.com -> Profile -> Privacy settin
 | Action | How |
 |---|---|
 | Rate an item | Hover it in game, **Ctrl+C** |
-| Craft suggestions on a rare | Hover it, **Ctrl+Alt+C** |
 | Refresh the character | `↻` (also automatic every 2 minutes; the game updates character data after zoning/logout) |
 | Change the skill the numbers refer to | **Skill** drop-down (remembered per character), *Detect* scans all skills |
 | Full Path of Building stat list | **Stats** button |
