@@ -32,7 +32,7 @@ embedded LuaJIT) on your imported character, so the numbers follow the same rule
 
 ### Option A - installer (no Python needed)
 
-Download **`PoE-Assistant-Setup-<version>.exe`** from the [Releases](../../releases) page, run it, start *PoE Assistant*.
+Download **`PoE-Assistant-Setup-0.1.0.exe`** from the [Releases](../../releases) page, run it, start *PoE Assistant*.
 (The installer carries its own Python, so nothing else has to be installed. Windows SmartScreen may warn about an
 unsigned app - choose *More info -> Run anyway*.)
 
