@@ -1,0 +1,4 @@
+requests>=2.31
+pyperclip>=1.8
+customtkinter>=5.2
+lupa>=2.0
