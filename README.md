@@ -1,76 +1,110 @@
 # PoE Assistant
 
-Unofficial item-comparison HUD for **Path of Exile 1**, powered by the calculation engine of
-[Path of Building Community](https://github.com/PathOfBuildingCommunity/PathOfBuilding).
+**Unofficial item-comparison overlay for Path of Exile 1, powered by Path of Building's own calculation engine.**
 
-Copy an item in game (hover it and press **Ctrl+C**) and the overlay tells you - using *your* character, tree,
-gems and gear - whether it is an upgrade, what you gain and what you give up, and what could be improved on it.
+Hover an item in game, press **Ctrl+C**, and PoE Assistant tells you - using *your* character, passive tree, gems and
+gear - whether the item is an upgrade, what you gain, what you give up, and what could still be improved on it.
 
-> Early test version (alpha). Windows only. Feedback and bug reports are very welcome.
+> **Status: early alpha.** Windows only. It works on the author's machine; expect rough edges and please report them.
+> Not affiliated with or endorsed by Grinding Gear Games.
+
+## Why
+
+Price-check tools tell you what an item is worth. PoE Assistant tells you what it is worth **to your build**.
+It does not re-implement any game math: it runs the real Path of Building Community calculation code (in an
+embedded LuaJIT) on your imported character, so the numbers follow the same rules as the Path of Building you know.
 
 ## Features
 
-- Loads your character from the public character API and calculates it with Path of Building's own engine.
-- Overlay with DPS, EHP, life, ES and resistances (capped value plus the full value, e.g. `FIRE 75% (135%)`).
-- **Item analysis window** (opens automatically): current vs. new values, bars, what the new item brings and
-  what you give up, resistance caps, and a per-modifier breakdown of both items.
-- **Upgrade ideas** for the copied item: enchants, amulet anoints, single modifiers, best pairs and
-  "replace the weakest modifier" suggestions (copy with **Ctrl+Alt+C** for full craft suggestions on rares).
-- **Stats** window with the same stat list as Path of Building's sidebar.
-- Main skill is pinned per character; the **Detect** button scans all skills on demand.
-- Path of Building data is checked and **updated automatically** on every start.
+- **Your character, automatically.** Loads your public character (items, passive tree, jewels, gems) and calculates it.
+- **Compact overlay:** DPS, EHP, life, ES and resistances - capped value plus full value, e.g. `FIRE 75% (135%)`.
+- **Item analysis window** (opens when you copy an item):
+  - current vs. new values with change bars,
+  - what the new item brings, what you give up, resistance caps,
+  - per-modifier value for both items, side by side.
+- **Upgrade ideas** for the copied item - enchants, amulet anoints, single modifiers, best modifier pairs and
+  "replace the weakest modifier" suggestions. Copy rares with **Ctrl+Alt+C** to unlock craft suggestions.
+- **Stats window** with the same stat list as Path of Building's sidebar.
+- **Main skill pinned per character** (with an on-demand *Detect* scan), so the numbers always refer to the skill you play.
+- **Path of Building data updates itself** on every start, with an automatic fallback to a tested version.
+
+<!-- Add screenshots here: overlay, item analysis window, upgrade ideas -->
 
 ## Install (Windows)
 
-1. Install [Python 3.10 or newer](https://www.python.org/downloads/windows/) - tick **"Add python.exe to PATH"**.
-2. Download or clone this repository, then double-click **`install.bat`**.
+1. Install [Python 3.10 or newer](https://www.python.org/downloads/windows/) and tick **"Add python.exe to PATH"**.
+2. Download this repository (Code -> Download ZIP) and unpack it. Double-click **`install.bat`**.
    It creates a virtual environment, installs the dependencies and puts a shortcut on your desktop.
 3. Start **PoE Assistant** from the shortcut (or `run.bat`).
-4. On first start enter your account name (e.g. `Name#1234`) in the settings panel (`≡`) and press **Save**.
-   The first start also downloads the Path of Building data - this needs an internet connection and takes a moment.
+4. Enter your account name (e.g. `Name#1234`) in the settings panel (`≡`) and press **Save**.
+   The first start also downloads the Path of Building data, which needs an internet connection.
 
-Your characters must be **public** (pathofexile.com -> Profile -> Privacy settings), otherwise the server answers
-with an error (HTTP 403).
+Your characters must be **public** (pathofexile.com -> Profile -> Privacy settings), otherwise the server answers with HTTP 403.
 
 ## Usage
 
-- Pick your character in the drop-down; `↻` refreshes it (it also refreshes every 2 minutes).
-  The game's character data only updates after you change zones/log out.
-- Hover an item in game and press **Ctrl+C**. For craft suggestions on rare items use **Ctrl+Alt+C**.
-- `Upgrade ideas` calculates suggestions (can take up to ~30 s), `Compare` re-opens the analysis window.
-- If the main skill is wrong, choose the right one in the **Skill** drop-down (it is remembered per character).
+| Action | How |
+|---|---|
+| Rate an item | Hover it in game, **Ctrl+C** |
+| Craft suggestions on a rare | Hover it, **Ctrl+Alt+C** |
+| Refresh the character | `↻` (also automatic every 2 minutes; the game updates character data after zoning/logout) |
+| Change the skill the numbers refer to | **Skill** drop-down (remembered per character), *Detect* scans all skills |
+| Full Path of Building stat list | **Stats** button |
 
-Supported slots: helmet, body armour, gloves, boots, belt, amulet, rings, weapons, shields and quivers.
-Flasks and jewels are not supported yet.
+Supported: helmet, body armour, gloves, boots, belt, amulet, rings, weapons, shields, quivers.
+Not supported yet: flasks and jewels.
+
+## Compatibility with Path of Building updates
+
+Path of Building is written in an extended dialect of Lua. When its authors adopt new syntax, third-party tools that run its
+code outside the official program can break. PoE Assistant handles this in layers:
+
+- It downloads the latest Path of Building Community release on start and compares it with its local copy.
+- Source files are passed through a small compatibility step (for example `a += 1` is rewritten for plain LuaJIT).
+- If a release does not start, the app **remembers it as incompatible, rolls back to the previous copy or installs the
+  tested version (currently 2.68.1)**, and keeps working. The skipped versions are listed in `config.json`.
+
+Developed and tested against Path of Building Community **2.68.1**.
 
 ## Limitations
 
-- Uses the unofficial `character-window` endpoints of pathofexile.com. GGG can change or restrict them at any time.
-- Numbers are calculated with Path of Building's *default configuration* (no boss/charges/flask assumptions yet),
-  so they may differ from your own PoB setup.
-- Craft suggestions rate the effect on your build only - not the price or the chance to roll a modifier.
-- Developed and tested against Path of Building Community 2.68. Newer versions are downloaded automatically;
-  if one fails to start, the app rolls back to the previous version and remembers to skip the broken one.
+- Uses the unofficial `character-window` endpoints of pathofexile.com; GGG may change or restrict them at any time.
+- Calculated with Path of Building's *default configuration* (no boss, charges or flask assumptions yet), so numbers can differ from your own PoB setup.
+- Craft suggestions rate the effect on your build only - not price or the chance of rolling a modifier.
+- English interface only.
 
 ## Privacy
 
-No telemetry. The app stores your account name, settings, a log file and the downloaded Path of Building data in
+No telemetry. The app stores your account name, settings, a log file and the Path of Building data in
 `%LOCALAPPDATA%\PoE Assistant`. It contacts only `pathofexile.com` (character data) and `github.com` (Path of Building updates).
-The app never asks for or stores your session cookie.
+It never asks for or stores your session cookie.
 
 ## Troubleshooting
 
-- Something does not work: run `run_debug.bat` (shows a console) and look at `poe_assistant.log` in the data folder
-  (the path is shown at the bottom of the settings panel). Please attach it to bug reports.
-- `HTTP 403`: your account or characters are private.
-- Nothing happens when copying an item: make sure the item text starts with `Item Class:` / `Rarity:`
-  (the game's own copy function) and that the supported slot is a gear slot (see above).
+- Run `run_debug.bat` (shows a console) and read `poe_assistant.log` in the data folder (shown at the bottom of the settings panel).
+  Please attach the log to bug reports.
+- *HTTP 403*: your account or characters are private.
+- *Path of Building ... is not supported yet*: normal after a new PoB release - the app falls back to a tested version. Please open an issue so support can be added.
+- Nothing happens when you copy an item: the text must start with `Item Class:` / `Rarity:` (use the game's own copy shortcut).
+
+## For developers
+
+```
+poe_assistant.py   UI, character loading, item parsing, result presentation
+pob_engine.py      embeds Path of Building (via lupa/LuaJIT): import, skill selection, comparison, craft analysis
+pob_updater.py     downloads/updates/rolls back the Path of Building source
+```
+
+Run from source: `pip install -r requirements.txt` then `python poe_assistant.py`.
+Contributions are welcome - especially compatibility fixes for new Path of Building releases, flasks/jewels, and tests.
 
 ## Build a Setup.exe (optional)
 
-Install [Inno Setup 6](https://jrsoftware.org/isinfo.php), run `install.bat` once, then run `build_installer.bat`.
-It packs the app with PyInstaller and compiles `installer.iss` into `Output\PoE-Assistant-Setup.exe`.
+Install [Inno Setup 6](https://jrsoftware.org/isinfo.php), run `install.bat` once, then `build_installer.bat`
+(PyInstaller + `installer.iss` -> `Output\PoE-Assistant-Setup.exe`). This route is untested - feedback welcome.
 
-## License
+## Credits and license
 
-MIT - see [LICENSE](LICENSE) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Built on [Path of Building Community](https://github.com/PathOfBuildingCommunity/PathOfBuilding) (MIT) - thank you to its authors.
+PoE Assistant is released under the MIT license; see [LICENSE](LICENSE) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+*Path of Exile* is a trademark of Grinding Gear Games.
