@@ -28,16 +28,25 @@ embedded LuaJIT) on your imported character, so the numbers follow the same rule
 - **Main skill pinned per character** (with an on-demand *Detect* scan), so the numbers always refer to the skill you play.
 - **Path of Building data updates itself** on every start, with an automatic fallback to a tested version.
 
-<!-- Add screenshots here: overlay, item analysis window, upgrade ideas -->
-
 ## Install (Windows)
 
-1. Install [Python 3.10 or newer](https://www.python.org/downloads/windows/) and tick **"Add python.exe to PATH"**.
+### Option A - installer (no Python needed)
+
+Download **`PoE-Assistant-Setup-<version>.exe`** from the [Releases](../../releases) page, run it, start *PoE Assistant*.
+(The installer carries its own Python, so nothing else has to be installed. Windows SmartScreen may warn about an
+unsigned app - choose *More info -> Run anyway*.)
+
+### Option B - from source
+
+1. Install [Python 3.10 or newer](https://www.python.org/downloads/windows/) (3.12 or 3.13 are the safest choices; the new Python Install Manager for 3.14 works too).
 2. Download this repository (Code -> Download ZIP) and unpack it. Double-click **`install.bat`**.
-   It creates a virtual environment, installs the dependencies and puts a shortcut on your desktop.
+   It finds the installed Python wherever it lives, creates a private environment, installs the dependencies and puts a shortcut on your desktop.
 3. Start **PoE Assistant** from the shortcut (or `run.bat`).
-4. Enter your account name (e.g. `Name#1234`) in the settings panel (`≡`) and press **Save**.
-   The first start also downloads the Path of Building data, which needs an internet connection.
+
+### First start
+
+Enter your account name (e.g. `Name#1234`) in the settings panel (`≡`) and press **Save**.
+The first start also downloads the Path of Building data, which needs an internet connection.
 
 Your characters must be **public** (pathofexile.com -> Profile -> Privacy settings), otherwise the server answers with HTTP 403.
 
@@ -84,6 +93,7 @@ It never asks for or stores your session cookie.
 - Run `run_debug.bat` (shows a console) and read `poe_assistant.log` in the data folder (shown at the bottom of the settings panel).
   Please attach the log to bug reports.
 - *HTTP 403*: your account or characters are private.
+- You updated or uninstalled Python: just start the app again - it rebuilds its environment automatically (or run `install.bat`).
 - *Path of Building ... is not supported yet*: normal after a new PoB release - the app falls back to a tested version. Please open an issue so support can be added.
 - Nothing happens when you copy an item: the text must start with `Item Class:` / `Rarity:` (use the game's own copy shortcut).
 
