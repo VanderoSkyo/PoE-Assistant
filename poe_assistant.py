@@ -1404,7 +1404,27 @@ def migrate_old_files():
             pass
 
 
+def run_selftest():
+    """For the build scripts/CI: checks that every dependency is present in the (frozen) application."""
+    problems = []
+    try:
+        import customtkinter, requests, pyperclip  # noqa: F401
+        import pob_updater  # noqa: F401
+        from pob_engine import LuaRuntime
+        assert LuaRuntime().eval("1 + 1") == 2
+    except Exception:
+        problems.append(traceback.format_exc())
+    try:
+        with open(os.path.join(DATA_DIR, "selftest.txt"), "w", encoding="utf-8") as f:
+            f.write("OK\n" if not problems else "FAILED\n" + "\n".join(problems))
+    except Exception:
+        pass
+    return 1 if problems else 0
+
+
 if __name__ == "__main__":
+    if "--selftest" in sys.argv:
+        sys.exit(run_selftest())
     try:
         migrate_old_files()
         App().run()
